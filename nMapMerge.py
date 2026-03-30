@@ -82,8 +82,11 @@ def main_nMapMerger(xmlSet, mergeFile):
     for xml in xmlSet:
         if xml.endswith('.xml'):
             logging.debug("Parsing: %r", xml)
-            H = merge_nMap(xml, mergeFile)
-            HOSTS += H
+            try:
+                H = merge_nMap(xml, mergeFile)
+                HOSTS += H
+            except ET.ParseError as e:
+                logging.warning("Skipping %r: %s", xml, e)
 
     addFooter(mergeFile, HOSTS)
     print('')
